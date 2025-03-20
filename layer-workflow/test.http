@@ -1,0 +1,6 @@
+@baseUrl = http://localhost:8080
+### GET request to example server
+GET {{baseUrl}}/api
+
+### GET request error to example server
+GET {{baseUrl}}/api/error
