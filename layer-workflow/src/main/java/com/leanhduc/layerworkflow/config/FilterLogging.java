@@ -18,7 +18,7 @@ public class FilterLogging implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         logger.info("Filter: Incoming request - {}", req.getRequestURI());
-
+       
         chain.doFilter(request, response); // Continue request
 
         HttpServletResponse resp = (HttpServletResponse) response;
