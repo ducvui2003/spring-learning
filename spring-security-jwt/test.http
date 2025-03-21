@@ -1,0 +1,18 @@
+@baseUrl=http://localhost:8081
+### GET Regsiter
+GET {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "ducvui2003@gmail.com",
+  "password": "123123123"
+}
+
+### GET Login
+GET {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ducvui2003@gmail.com",
+  "password": "123123123"
+}
