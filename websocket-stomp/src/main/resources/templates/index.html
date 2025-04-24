@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>STOMP WebSocket Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+<h2>STOMP WebSocket Test</h2>
+
+<button onclick="connect()">Connect</button>
+<button onclick="disconnect()">Disconnect</button>
+<br><br>
+<input type="text" id="group" placeholder="Enter group id">
+<button onclick="subscribe()">Send</button>
+<input type="text" id="messageInput" placeholder="Message to send..."/>
+<button onclick="sendMessage()">Send</button>
+
+<h3>Received Messages:</h3>
+<pre id="messages"></pre>
+
+<script>
+    let stompClient = null;
+    let group = null
+
+    function connect() {
+        const socket = new SockJS('http://localhost:8081/portfolio'); // <-- Change this URL if needed
+        stompClient = Stomp.over(socket);
+        const headers = {
+            Authorization: "Bearer YOUR_JWT_TOKEN"
+        };
+        stompClient.connect(headers, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/greetings', function (message) {
+                document.getElementById('messages').textContent += message.body + '\n';
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient !== null) {
+            stompClient.disconnect();
+        }
+        console.log("Disconnected");
+    }
+
+    function subscribe() {
+        group = document.getElementById('group').value;
+        stompClient.subscribe(`/topic/room/${group}`, function (message) {
+            const payload = JSON.parse(message.body);  // 🔥 parse JSON
+            console.log(payload);
+            document.getElementById('messages').textContent += payload.name + '\n';
+        });
+        console.log(`Subscribed to /topic/room/${group}`);
+
+    }
+
+    function sendMessage() {
+        const message = document.getElementById('messageInput').value;
+        if (group) {
+            stompClient.send(`/app/group/${group}`, {}, JSON.stringify({name: message}))
+        } else
+            stompClient.send("/app/hello", {}, JSON.stringify({name: message}));
+    }
+</script>
+</body>
+</html>

@@ -54,12 +54,4 @@ public class JwtUtil {
             return false;
         }
     }
-
-    public static void main(String[] args) {
-        JwtUtil jwt = new JwtUtil("jwt-tokenjwt-tokenjwt-tokenjwt-tokenjwt-tokenjwt-token", 3600);
-        String token = jwt.generateToken("jwt-user");
-        System.out.println(token);
-        
-        System.out.println(jwt.validateToken(token));
-    }
 }
